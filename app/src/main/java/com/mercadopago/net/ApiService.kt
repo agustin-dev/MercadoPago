@@ -1,19 +1,17 @@
 package com.mercadopago.net
 
-import com.mercadopago.BuildConfig
 import com.mercadopago.model.Bank
-import com.mercadopago.model.Card
+import com.mercadopago.model.PaymentMethod
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("filter.php?g=Cocktail_glass")
-    suspend fun getCards(@Query(BuildConfig.API_KEY) key: String): List<Card>
+    @GET("")
+    suspend fun getCards(): List<PaymentMethod>
+
+    @GET("card_issuers")
+    suspend fun getBanks(): List<Bank>
 
     @GET("lookup.php")
-    suspend fun getBanks(@Query(BuildConfig.API_KEY) key: String): List<Bank>
-
-    @GET("lookup.php")
-    suspend fun getInstallments(@Query("i") id: Int): List<Int>
+    suspend fun getInstallments(): List<Int>
 }
