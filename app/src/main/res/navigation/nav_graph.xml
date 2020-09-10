@@ -15,5 +15,21 @@
     <fragment
         android:id="@+id/cardFragment"
         android:name="com.mercadopago.ui.fragment.MethodFragment"
-        android:label="CardFragment" />
+        android:label="CardFragment" >
+        <action
+            android:id="@+id/action_cardFragment_to_issuerFragment"
+            app:destination="@id/issuerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/issuerFragment"
+        android:name="com.mercadopago.ui.fragment.IssuerFragment"
+        android:label="IssuerFragment" >
+        <action
+            android:id="@+id/action_issuerFragment_to_installmentsFragment"
+            app:destination="@id/installmentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/installmentsFragment"
+        android:name="com.mercadopago.ui.fragment.InstallmentsFragment"
+        android:label="InstallmentsFragment" />
 </navigation>

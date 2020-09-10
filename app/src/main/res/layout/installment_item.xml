@@ -4,14 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="method" type="com.mercadopago.model.PaymentMethod"/>
+        <variable name="payer_cost" type="com.mercadopago.model.PayerCost"/>
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/method_item_card"
+        android:id="@+id/installment_item_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="@{method.id}"
+        android:tag="@{payer_cost.installments}"
         android:layout_margin="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,25 +20,15 @@
             android:layout_margin="8dp"
             android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/method_item_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:adjustViewBounds="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
-                android:id="@+id/method_item_name"
+                android:id="@+id/installment_item_installments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{method.name}"
-                android:textSize="16sp"
-                android:singleLine="true"
+                android:text="@{payer_cost.recommended_message}"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/method_item_image"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,27 +10,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragment.MethodFragment">
+        tools:context=".ui.fragment.InstallmentsFragment">
 
         <TextView
-            android:id="@+id/method_item_name"
+            android:id="@+id/installments_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Seleccione método de pago"
+            android:text="Seleccione cantidad de cuotas"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/methods_list"
+            android:id="@+id/installments_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/method_item_name" />
+            app:layout_constraintTop_toBottomOf="@+id/installments_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

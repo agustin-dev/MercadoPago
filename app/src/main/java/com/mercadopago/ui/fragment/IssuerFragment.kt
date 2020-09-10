@@ -10,35 +10,33 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mercadopago.R
-import com.mercadopago.databinding.MethodFragmentBinding
-import com.mercadopago.model.PaymentMethod
-import com.mercadopago.ui.adapter.MethodAdapter
+import com.mercadopago.databinding.IssuerFragmentBinding
+import com.mercadopago.model.Issuer
+import com.mercadopago.ui.adapter.IssuerAdapter
 import com.mercadopago.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MethodFragment : Fragment() {
+class IssuerFragment : Fragment() {
 
     val viewModel by activityViewModels<MainViewModel>()
-    val methods = ArrayList<PaymentMethod>()
-    val methodsAdapter = MethodAdapter(methods) { v ->
-        viewModel.showIssuers(v, methods.find { it.id == v.tag.toString() })
+    val issuers = ArrayList<Issuer>()
+    val issuerAdapter = IssuerAdapter(issuers) { v ->
+        viewModel.showInstallments(v, issuers.find { it.id == v.tag.toString() })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding: MethodFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.method_fragment, container, false)
+        val binding: IssuerFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.issuer_fragment, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        binding.methodsList.apply {
+        binding.issuersList.apply {
             hasFixedSize()
-            adapter = methodsAdapter
+            adapter = issuerAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
-        viewModel.amout.value = "100"
 
         return binding.root
     }
@@ -46,10 +44,14 @@ class MethodFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getCards().observe(viewLifecycleOwner) {
-            methods.clear()
-            methods.addAll(it)
-            methodsAdapter.notifyDataSetChanged()
+        viewModel.getIssuers().observe(viewLifecycleOwner) {
+            issuers.clear()
+            if (it.isNotEmpty()) {
+                issuers.addAll(it)
+                issuerAdapter.notifyDataSetChanged()
+            } else {
+                viewModel.showInstallments(requireView(), null)
+            }
         }
     }
 

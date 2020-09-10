@@ -5,28 +5,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mercadopago.databinding.MethodItemBinding
-import com.mercadopago.model.PaymentMethod
+import com.mercadopago.databinding.IssuerItemBinding
+import com.mercadopago.model.Issuer
 
-class MethodAdapter(
-    val paymentMethods: List<PaymentMethod>,
+class IssuerAdapter(
+    val issuers: List<Issuer>,
     val onClickListener: View.OnClickListener
 ) :
-    RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
+    RecyclerView.Adapter<IssuerAdapter.ViewHolder>() {
 
-    class ViewHolder(val bind: MethodItemBinding) : RecyclerView.ViewHolder(bind.root) {
-        fun bind(paymentMethod: PaymentMethod) {
-            bind.method = paymentMethod
+    class ViewHolder(val bind: IssuerItemBinding) : RecyclerView.ViewHolder(bind.root) {
+        fun bind(issuer: Issuer) {
+            bind.issuer = issuer
 
             Glide.with(bind.root)
-                .load(paymentMethod.thumbnail)
+                .load(issuer.thumbnail)
                 .placeholder(android.R.drawable.stat_sys_download)
-                .into(bind.methodItemImage)
+                .into(bind.issuerItemImage)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = MethodItemBinding.inflate(
+        val binding = IssuerItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false)
@@ -36,9 +36,9 @@ class MethodAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = paymentMethods.size
+    override fun getItemCount(): Int = issuers.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(paymentMethods[position])
+        holder.bind(issuers[position])
     }
 }

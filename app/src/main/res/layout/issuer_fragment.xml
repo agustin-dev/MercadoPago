@@ -8,30 +8,29 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragment.BankFragment">
+        tools:context=".ui.fragment.IssuerFragment">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/issuer_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Seleccione banco"
+            android:text="Seleccione el banco"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Siguiente"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/issuers_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_margin="16dp"
-            android:onClick="@{(view) -> viewmodel.nextStep(view)}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/issuer_item_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
