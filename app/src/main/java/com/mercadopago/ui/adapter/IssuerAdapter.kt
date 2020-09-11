@@ -17,11 +17,6 @@ class IssuerAdapter(
     class ViewHolder(val bind: IssuerItemBinding) : RecyclerView.ViewHolder(bind.root) {
         fun bind(issuer: Issuer) {
             bind.issuer = issuer
-
-            Glide.with(bind.root)
-                .load(issuer.thumbnail)
-                .placeholder(android.R.drawable.stat_sys_download)
-                .into(bind.issuerItemImage)
         }
     }
 

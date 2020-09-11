@@ -29,13 +29,27 @@ class IssuerFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         val binding: IssuerFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.issuer_fragment, container, false)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
+        binding.apply {
+            viewmodel = this@IssuerFragment.viewModel
+            binding.lifecycleOwner = this@IssuerFragment
+            issuersList.apply {
+                hasFixedSize()
+                adapter = issuerAdapter
+                layoutManager = LinearLayoutManager(context)
+            }
+        }
 
-        binding.issuersList.apply {
-            hasFixedSize()
-            adapter = issuerAdapter
-            layoutManager = LinearLayoutManager(context)
+        viewModel.getIssuers().observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                issuers.apply {
+                    clear()
+                    addAll(it)
+                    sortBy { it.name }
+                }
+                issuerAdapter.notifyDataSetChanged()
+            } else {
+                viewModel.showInstallments(requireView(), null)
+            }
         }
 
         return binding.root
@@ -44,15 +58,7 @@ class IssuerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getIssuers().observe(viewLifecycleOwner) {
-            issuers.clear()
-            if (it.isNotEmpty()) {
-                issuers.addAll(it)
-                issuerAdapter.notifyDataSetChanged()
-            } else {
-                viewModel.showInstallments(requireView(), null)
-            }
-        }
+
     }
 
 }

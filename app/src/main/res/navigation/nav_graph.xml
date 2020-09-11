@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_cardFragment_to_issuerFragment"
             app:destination="@id/issuerFragment" />
+        <action
+            android:id="@+id/action_cardFragment_to_installmentsFragment"
+            app:destination="@id/installmentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/issuerFragment"
@@ -31,5 +34,21 @@
     <fragment
         android:id="@+id/installmentsFragment"
         android:name="com.mercadopago.ui.fragment.InstallmentsFragment"
-        android:label="InstallmentsFragment" />
+        android:label="InstallmentsFragment" >
+        <action
+            android:id="@+id/action_installmentsFragment_to_inputDataFragment"
+            app:destination="@id/inputDataFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inputDataFragment"
+        android:name="com.mercadopago.ui.fragment.InputDataFragment"
+        android:label="InputDataFragment" >
+        <action
+            android:id="@+id/action_inputDataFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="com.mercadopago.ui.fragment.SummaryFragment"
+        android:label="SummaryFragment" />
 </navigation>

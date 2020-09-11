@@ -25,6 +25,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:adjustViewBounds="true"
+                app:thumbnail="@{ method.thumbnail }"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

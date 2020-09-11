@@ -11,7 +11,6 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mercadopago.R
 import com.mercadopago.databinding.InstallmentsFragmentBinding
-import com.mercadopago.model.Installment
 import com.mercadopago.model.PayerCost
 import com.mercadopago.ui.adapter.InstallmentAdapter
 import com.mercadopago.ui.viewmodel.MainViewModel
@@ -21,9 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class InstallmentsFragment : Fragment() {
 
     val viewModel by activityViewModels<MainViewModel>()
-    val payerCost = ArrayList<PayerCost>()
-    val installmentAdapter = InstallmentAdapter(payerCost) {
-        viewModel.nextStep(it)
+    val payersCost = ArrayList<PayerCost>()
+    val installmentAdapter = InstallmentAdapter(payersCost) { v ->
+        viewModel.showInputData(v, payersCost.find { it.installments.toString() == v.tag.toString() })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +45,11 @@ class InstallmentsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getInstallments().observe(viewLifecycleOwner) {
-            payerCost.clear()
-            payerCost.addAll(it.first().payer_costs)
+            payersCost.apply {
+                clear()
+                addAll(it.first().payer_costs)
+                sortBy { it.installments }
+            }
             installmentAdapter.notifyDataSetChanged()
         }
     }

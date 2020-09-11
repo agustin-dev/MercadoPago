@@ -17,11 +17,6 @@ class MethodAdapter(
     class ViewHolder(val bind: MethodItemBinding) : RecyclerView.ViewHolder(bind.root) {
         fun bind(paymentMethod: PaymentMethod) {
             bind.method = paymentMethod
-
-            Glide.with(bind.root)
-                .load(paymentMethod.thumbnail)
-                .placeholder(android.R.drawable.stat_sys_download)
-                .into(bind.methodItemImage)
         }
     }
 

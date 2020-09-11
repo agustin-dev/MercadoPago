@@ -38,7 +38,7 @@ class MethodFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
-        viewModel.amout.value = "100"
+        viewModel.amount.value = "100"
 
         return binding.root
     }
@@ -47,8 +47,11 @@ class MethodFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getCards().observe(viewLifecycleOwner) {
-            methods.clear()
-            methods.addAll(it)
+            methods.apply {
+                clear()
+                addAll(it)
+                sortBy { it.name }
+            }
             methodsAdapter.notifyDataSetChanged()
         }
     }
