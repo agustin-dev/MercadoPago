@@ -239,7 +239,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
-                android:onClick="@{(view) -> viewmodel.nextStep(view)}"
+                android:onClick="@{(view) -> viewmodel.backToHome(view)}"
                 android:text="Reiniciar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

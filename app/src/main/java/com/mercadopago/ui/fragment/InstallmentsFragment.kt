@@ -1,5 +1,6 @@
 package com.mercadopago.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mercadopago.R
 import com.mercadopago.databinding.InstallmentsFragmentBinding
 import com.mercadopago.model.PayerCost
+import com.mercadopago.model.Result
 import com.mercadopago.ui.adapter.InstallmentAdapter
 import com.mercadopago.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,13 +48,28 @@ class InstallmentsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getInstallments().observe(viewLifecycleOwner) {
-            payersCost.apply {
-                binding.installmentsLoading.visibility = View.GONE
-                clear()
-                addAll(it.first().payer_costs)
-                sortBy { it.installments }
+
+
+            when(it) {
+                is Result.Success -> {
+                    payersCost.apply {
+                        binding.installmentsLoading.visibility = View.GONE
+                        clear()
+                        addAll(it.data.first().payer_costs)
+                        sortBy { it.installments }
+                    }
+                    installmentAdapter.notifyDataSetChanged()
+                }
+                is Result.Error -> {
+                    AlertDialog.Builder(context)
+                        .setTitle("ERROR")
+                        .setMessage("Intente más tarde")
+                        .setNeutralButton("Cerrar") { _, _ ->
+                            viewModel.backToHome(requireView())
+                        }
+                        .show()
+                }
             }
-            installmentAdapter.notifyDataSetChanged()
         }
     }
 

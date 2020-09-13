@@ -8,7 +8,7 @@ import androidx.lifecycle.liveData
 import androidx.navigation.Navigation
 import com.mercadopago.R
 import com.mercadopago.model.*
-import com.mercadopago.net.ApiRepository
+import com.mercadopago.repositories.ApiRepository
 import com.mercadopago.util.Keyboard
 import kotlinx.coroutines.Dispatchers
 
@@ -23,21 +23,9 @@ class MainViewModel @ViewModelInject constructor(
     var card: Card = Card()
 
 
-    fun nextStep(view: View) {
+    fun showPaymentMethods(view: View) {
         Keyboard.hide(view)
-        when (view.id) {
-            R.id.amount_btn_ok -> {
-                Navigation.findNavController(view).navigate(R.id.action_amountFragment_to_cardFragment)
-            }
-            else -> {
-                amount.value = null
-                paymentMethod = null
-                issuer = null
-                payerCost = null
-                card = Card()
-                Navigation.findNavController(view).popBackStack(R.id.amountFragment, false)
-            }
-        }
+        Navigation.findNavController(view).navigate(R.id.action_amountFragment_to_cardFragment)
     }
 
     fun showIssuers(v: View, m: PaymentMethod?) {
@@ -73,18 +61,28 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+    fun backToHome(v: View) {
+        amount.value = null
+        paymentMethod = null
+        issuer = null
+        payerCost = null
+        card = Card()
+        Navigation.findNavController(v).popBackStack(R.id.amountFragment, false)
+    }
+
     fun getCards() = liveData(Dispatchers.IO) {
         emit(apiRepository.getMethods())
     }
 
-    fun getIssuers() = liveData {
+    fun getIssuers() = liveData(Dispatchers.IO) {
         emit(apiRepository.getIssuers(paymentMethod?.id ?: ""))
     }
 
-    fun getInstallments() = liveData {
+    fun getInstallments() = liveData(Dispatchers.IO) {
         emit(apiRepository.getInstallments(
             amount.value ?: "",
             paymentMethod?.id ?: "",
-        issuer?.id ?: ""))
+            issuer?.id ?: "")
+        )
     }
 }

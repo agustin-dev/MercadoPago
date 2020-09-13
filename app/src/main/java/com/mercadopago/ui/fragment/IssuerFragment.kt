@@ -1,5 +1,6 @@
 package com.mercadopago.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mercadopago.R
 import com.mercadopago.databinding.IssuerFragmentBinding
 import com.mercadopago.model.Issuer
+import com.mercadopago.model.Result
 import com.mercadopago.ui.adapter.IssuerAdapter
 import com.mercadopago.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,16 +43,29 @@ class IssuerFragment : Fragment() {
         }
 
         viewModel.getIssuers().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                issuers.apply {
-                    binding.issuerLoading.visibility = View.GONE
-                    clear()
-                    addAll(it)
-                    sortBy { it.name }
+            when(it) {
+                is Result.Success -> {
+                    if (it.data.isNotEmpty()) {
+                        issuers.apply {
+                            binding.issuerLoading.visibility = View.GONE
+                            clear()
+                            addAll(it.data)
+                            sortBy { it.name }
+                        }
+                        issuerAdapter.notifyDataSetChanged()
+                    } else {
+                        viewModel.showInstallments(requireView(), null)
+                    }
                 }
-                issuerAdapter.notifyDataSetChanged()
-            } else {
-                viewModel.showInstallments(requireView(), null)
+                is Result.Error -> {
+                    AlertDialog.Builder(context)
+                        .setTitle("ERROR")
+                        .setMessage("Intente más tarde")
+                        .setNeutralButton("Cerrar") { _, _ ->
+                            viewModel.backToHome(requireView())
+                        }
+                        .show()
+                }
             }
         }
 

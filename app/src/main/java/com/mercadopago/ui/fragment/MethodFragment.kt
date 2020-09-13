@@ -1,5 +1,6 @@
 package com.mercadopago.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mercadopago.R
 import com.mercadopago.databinding.MethodFragmentBinding
 import com.mercadopago.model.PaymentMethod
+import com.mercadopago.model.Result
 import com.mercadopago.ui.adapter.MethodAdapter
 import com.mercadopago.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,13 +50,26 @@ class MethodFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getCards().observe(viewLifecycleOwner) {
-            methods.apply {
-                binding.methodLoading.visibility = View.GONE
-                clear()
-                addAll(it)
-                sortBy { it.name }
+            when(it) {
+                is Result.Success -> {
+                    methods.apply {
+                        binding.methodLoading.visibility = View.GONE
+                        clear()
+                        addAll(it.data)
+                        sortBy { it.name }
+                    }
+                    methodsAdapter.notifyDataSetChanged()
+                }
+                is Result.Error -> {
+                    AlertDialog.Builder(context)
+                        .setTitle("ERROR")
+                        .setMessage("Intente más tarde")
+                        .setNeutralButton("Cerrar") { _, _ ->
+                            viewModel.backToHome(requireView())
+                        }
+                        .show()
+                }
             }
-            methodsAdapter.notifyDataSetChanged()
         }
     }
 
