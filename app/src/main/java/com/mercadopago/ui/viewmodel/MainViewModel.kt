@@ -1,6 +1,8 @@
 package com.mercadopago.ui.viewmodel
 
+import android.text.Editable
 import android.view.View
+import android.widget.EditText
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,15 +19,15 @@ class MainViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val amount: MutableLiveData<String> = MutableLiveData()
-    val amountMask: MaskWatcher = MaskWatcher()
     var paymentMethod: PaymentMethod? = null
     var issuer: Issuer? = null
     var payerCost: PayerCost? = null
     var card: Card = Card()
 
+
     fun nextStep(view: View) {
         when (view.id) {
-            R.id.btn_amount -> {
+            R.id.amount_btn_ok -> {
                 Navigation.findNavController(view).navigate(R.id.action_amountFragment_to_cardFragment)
             }
             R.id.input_data_btn_ok -> {

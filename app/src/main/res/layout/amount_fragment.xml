@@ -14,49 +14,40 @@
         tools:context=".ui.fragment.AmountFragment">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/amount_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Introduzca la cantidad"
+            android:text="Complete el monto a pagar"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="$"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/message"
-            app:layout_constraintEnd_toStartOf="@+id/message"
-            app:layout_constraintTop_toTopOf="@+id/message" />
-
         <EditText
-            android:id="@+id/message"
-            android:layout_width="140dp"
+            android:id="@+id/amount_value"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:inputType="numberDecimal"
-            android:maxLength="9"
-            android:gravity="start"
+            android:digits="0123456789$ ."
+            android:hint="$ 0.00"
+            android:gravity="center_horizontal"
             android:text='@={ viewmodel.amount }'
-            android:addTextChangedListener="@{ viewmodel.amountMask }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/amount_title" />
 
         <Button
-            android:id="@+id/btn_amount"
+            android:id="@+id/amount_btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Aceptar"
             android:layout_margin="16dp"
+            android:enabled='@{ viewmodel.amount.length() > 0 }'
             android:onClick="@{(view) -> viewmodel.nextStep(view)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message" />
+            app:layout_constraintTop_toBottomOf="@+id/amount_value" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

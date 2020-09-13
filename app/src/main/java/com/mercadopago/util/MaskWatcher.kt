@@ -2,54 +2,106 @@ package com.mercadopago.util
 
 import android.text.Editable
 import android.text.TextWatcher
-import java.util.regex.Pattern
+import android.widget.EditText
+import java.lang.StringBuilder
 
 
-class MaskWatcher() : TextWatcher {
+class MaskWatcher(val editText: EditText) : TextWatcher {
     private var isRunning = false
     private var isDeleting = false
-    private var mask = "######.##"
+    private var cursorPos = 0
+    private var oldValue = ""
 
     override fun beforeTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
-        isDeleting = count > after
+        if (!isRunning) {
+            isDeleting = count > after
+            oldValue = charSequence.toString()
+        }
     }
 
-    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {}
+    override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
+        if (!isRunning) {
+            cursorPos = start
+        }
+    }
 
     override fun afterTextChanged(editable: Editable) {
-        if (isRunning) {
+        if (isRunning)
             return
-        }
+
+        // Prevents rerun after editable change
         isRunning = true
 
-        if (isDeleting) {
-            if (editable.length > 0) {
-                if (editable[0] == '.') {
-                    editable.insert(0, "0")
-                } else if (editable.length == mask.length - 1) {
-                    editable.insert(mask.length - 3, ".")
-                }
-            }
-        } else {
-            // editableLength points to last char
-            val editableLength = editable.length
+        val cleanValue = editable.replace(Regex("[$ ]"), "")
+        val newValue = StringBuilder(cleanValue)
 
-            if (editableLength < mask.length) {
-                if (mask[editableLength] != '#') {
-                    editable.append(mask[editableLength])
-                } else if (mask[editableLength - 1] != '#') {
-                    editable.insert(editableLength - 1, mask, editableLength - 1, editableLength)
-                }
-            } else if (editableLength > mask.length) {
-                editable.delete(editableLength - 1, editableLength)
-                // Verify mask consistency
-                for (i in 0..editableLength) {
-                    if (mask[i] != '#' && mask[i] != editable[i]) {
-                        editable.replaceRange(i, i, mask[i].toString())
+        if (newValue.isNotEmpty()) {
+            // Prevents more than one dot
+            if (newValue.count { it == '.' } > 1) {
+                oldValue = oldValue.replace(Regex("[$ ]"), "")
+                val originalDotIndex = oldValue.indexOf(".")
+                val newValueFirstDotIndex = newValue.indexOfFirst { it == '.' }
+                val newValueSecondDotIndex = newValue.indexOfLast { it == '.' }
+                newValue.deleteCharAt(
+                    if (newValueFirstDotIndex >= originalDotIndex)
+                        newValueSecondDotIndex
+                    else
+                        newValueFirstDotIndex
+                )
+                isDeleting = true
+            }
+            // Only two digits after dot
+            val digits = newValue.split(".")
+            if (digits.size > 1 && digits[1].length > 2) {
+                newValue.deleteCharAt(newValue.length - 1)
+                isDeleting = true
+            }
+            // Single dot add padding zero
+            if (cleanValue[0] == '.') {
+                if (isDeleting) {
+                    if (newValue.length <= 3) {
+                        newValue.clear()
                     }
+                } else {
+                    newValue.insert(0, "0")
+                }
+            } else {
+                // Remove leading zeros
+                newValue.apply {
+                    val n = replace(Regex("^0+"), "")
+                    clear()
+                    if (n.isNotEmpty() && n[0] == '.')
+                        append('0')
+                    append(n)
                 }
             }
+            // Inserts currency symbol
+            newValue.insert(0, "$ ")
         }
+
+        editable.apply {
+            clear()
+            append(newValue)
+        }
+
+        cursorPos = when {
+            newValue.isEmpty() -> 0
+            cursorPos > editable.length || cursorPos < 3 -> editable.length
+            !isDeleting -> cursorPos + 1
+            else -> cursorPos
+        }
+
+//        if (newValue.isEmpty()) {
+//            cursorPos = 0
+//        } else if (cursorPos < 3) {
+//            cursorPos = 2
+//        } else if (cursorPos > editable.length) {
+//            cursorPos--
+//        } else if (!isDeleting) {
+//            cursorPos++
+//        }
+
+        editText.setSelection(cursorPos)
 
         isRunning = false
     }
