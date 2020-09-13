@@ -25,68 +25,101 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Datos de la tarjeta"
-            android:textSize="16sp"
+            style="@style/Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/input_data_card_number"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_data_card_number_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Número de tarjeta"
-            android:inputType="number"
-            android:text="@={viewmodel.card.number}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_data_title" />
+            app:layout_constraintTop_toBottomOf="@+id/input_data_title">
 
-        <EditText
-            android:id="@+id/input_data_sec_number"
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/input_data_card_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de tarjeta"
+                android:inputType="number"
+                android:text="@={viewmodel.card.number}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_data_sec_number_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Código de seguridad"
-            android:inputType="numberPassword"
-            android:text="@={viewmodel.card.securityCode}"
+            app:passwordToggleEnabled="true"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_data_card_number" />
+            app:layout_constraintTop_toBottomOf="@+id/input_data_card_number_layout">
 
-        <com.github.pinball83.maskededittext.MaskedEditText
-            android:id="@+id/input_data_expire_date"
+            <EditText
+                android:id="@+id/input_data_sec_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Código de seguridad"
+                android:inputType="numberPassword"
+                android:text="@={viewmodel.card.securityCode}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_data_expire_date_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Fecha vencimiento"
-            android:inputType="number"
-            android:text="@={viewmodel.card.expireDate}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/input_data_card_number" />
+            app:layout_constraintTop_toBottomOf="@+id/input_data_card_number_layout">
 
-        <EditText
-            android:id="@+id/input_data_name"
+            <EditText
+                android:id="@+id/input_data_expire_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha vencimiento"
+                android:inputType="date"
+                android:digits="0123456789/ "
+                android:text="@={viewmodel.card.expireDate}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_data_name_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Apellido y Nombre"
-            android:inputType="textPersonName"
-            android:text="@={viewmodel.card.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_data_sec_number" />
+            app:layout_constraintTop_toBottomOf="@+id/input_data_sec_number_layout">
+
+            <EditText
+                android:id="@+id/input_data_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Apellido y Nombre"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                android:inputType="textPersonName"
+                android:text="@={viewmodel.card.name}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/input_data_btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:enabled='@{ viewmodel.paymentMethod.settings.size() > 0 ? (inputDataCardNumber.text.length == viewmodel.paymentMethod.settings.get(0).card_number.length &amp;&amp; (viewmodel.paymentMethod.settings.get(0).security_code.mode == "optional" || inputDataSecNumber.text.length == viewmodel.paymentMethod.settings.get(0).security_code.length)) : true }'
             android:text="ACEPTAR"
-            android:onClick="@{(view) -> viewmodel.nextStep(view)}"
+            android:onClick="@{(view) -> viewmodel.showSummary(view)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/input_data_name" />
+            app:layout_constraintTop_toBottomOf="@+id/input_data_name_layout" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

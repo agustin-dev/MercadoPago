@@ -84,22 +84,15 @@ class MaskWatcher(val editText: EditText) : TextWatcher {
             append(newValue)
         }
 
+        // Relocates cursor
         cursorPos = when {
             newValue.isEmpty() -> 0
-            cursorPos > editable.length || cursorPos < 3 -> editable.length
             !isDeleting -> cursorPos + 1
             else -> cursorPos
         }
 
-//        if (newValue.isEmpty()) {
-//            cursorPos = 0
-//        } else if (cursorPos < 3) {
-//            cursorPos = 2
-//        } else if (cursorPos > editable.length) {
-//            cursorPos--
-//        } else if (!isDeleting) {
-//            cursorPos++
-//        }
+        if (cursorPos > editable.length || cursorPos < 3)
+            cursorPos = editable.length
 
         editText.setSelection(cursorPos)
 

@@ -1,8 +1,6 @@
 package com.mercadopago.ui.viewmodel
 
-import android.text.Editable
 import android.view.View
-import android.widget.EditText
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +9,7 @@ import androidx.navigation.Navigation
 import com.mercadopago.R
 import com.mercadopago.model.*
 import com.mercadopago.net.ApiRepository
-import com.mercadopago.util.MaskWatcher
+import com.mercadopago.util.Keyboard
 import kotlinx.coroutines.Dispatchers
 
 class MainViewModel @ViewModelInject constructor(
@@ -26,12 +24,10 @@ class MainViewModel @ViewModelInject constructor(
 
 
     fun nextStep(view: View) {
+        Keyboard.hide(view)
         when (view.id) {
             R.id.amount_btn_ok -> {
                 Navigation.findNavController(view).navigate(R.id.action_amountFragment_to_cardFragment)
-            }
-            R.id.input_data_btn_ok -> {
-                Navigation.findNavController(view).navigate(R.id.action_inputDataFragment_to_summaryFragment)
             }
             else -> {
                 amount.value = null
@@ -39,7 +35,7 @@ class MainViewModel @ViewModelInject constructor(
                 issuer = null
                 payerCost = null
                 card = Card()
-                Navigation.findNavController(view).navigate(R.id.amountFragment)
+                Navigation.findNavController(view).popBackStack(R.id.amountFragment, false)
             }
         }
     }
@@ -64,6 +60,17 @@ class MainViewModel @ViewModelInject constructor(
     fun showInputData(v: View, p: PayerCost?) {
         payerCost = p
         Navigation.findNavController(v).navigate(R.id.action_installmentsFragment_to_inputDataFragment)
+    }
+
+    fun showSummary(v: View) {
+        with(Navigation.findNavController(v)) {
+            if (v.id != R.id.input_data_btn_ok) {
+                popBackStack()
+                navigate(R.id.action_installmentsFragment_to_summaryFragment)
+            } else {
+                navigate(R.id.action_inputDataFragment_to_summaryFragment)
+            }
+        }
     }
 
     fun getCards() = liveData(Dispatchers.IO) {

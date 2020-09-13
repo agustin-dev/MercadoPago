@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MethodFragment : Fragment() {
 
     val viewModel by activityViewModels<MainViewModel>()
+    lateinit var binding: MethodFragmentBinding
     val methods = ArrayList<PaymentMethod>()
     val methodsAdapter = MethodAdapter(methods) { v ->
         viewModel.showIssuers(v, methods.find { it.id == v.tag.toString() })
@@ -28,11 +29,11 @@ class MethodFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding: MethodFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.method_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.method_fragment, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        binding.methodsList.apply {
+        binding.methodList.apply {
             hasFixedSize()
             adapter = methodsAdapter
             layoutManager = LinearLayoutManager(context)
@@ -48,6 +49,7 @@ class MethodFragment : Fragment() {
 
         viewModel.getCards().observe(viewLifecycleOwner) {
             methods.apply {
+                binding.methodLoading.visibility = View.GONE
                 clear()
                 addAll(it)
                 sortBy { it.name }

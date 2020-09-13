@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class IssuerFragment : Fragment() {
 
     val viewModel by activityViewModels<MainViewModel>()
+    lateinit var binding: IssuerFragmentBinding
     val issuers = ArrayList<Issuer>()
     val issuerAdapter = IssuerAdapter(issuers) { v ->
         viewModel.showInstallments(v, issuers.find { it.id == v.tag.toString() })
@@ -28,11 +29,11 @@ class IssuerFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding: IssuerFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.issuer_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.issuer_fragment, container, false)
         binding.apply {
             viewmodel = this@IssuerFragment.viewModel
             binding.lifecycleOwner = this@IssuerFragment
-            issuersList.apply {
+            issuerList.apply {
                 hasFixedSize()
                 adapter = issuerAdapter
                 layoutManager = LinearLayoutManager(context)
@@ -42,6 +43,7 @@ class IssuerFragment : Fragment() {
         viewModel.getIssuers().observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 issuers.apply {
+                    binding.issuerLoading.visibility = View.GONE
                     clear()
                     addAll(it)
                     sortBy { it.name }

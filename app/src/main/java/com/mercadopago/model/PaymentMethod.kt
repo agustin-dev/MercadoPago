@@ -14,30 +14,30 @@ data class PaymentMethod(
     val type: String,
     val status: String,
     val thumbnail: String,
-    val settings: List<Settings>,
+    val settings: List<Settings?>?,
     val min_allowed_amount: Float,
     val max_allowed_amount: Float
 ) {
     data class Settings(
-        val card_number: CardNumber,
-        val bin: Bin,
-        val securityCode: SecurityCode
+        val card_number: CardNumber?,
+        val bin: Bin?,
+        val security_code: SecurityCode?
     ) {
         data class CardNumber(
-            val validation: String,
-            val length: Int
+            val validation: String?,
+            val length: Int?
         )
 
         data class Bin(
-            val pattern: String,
-            val installments_pattern: String,
-            val exclusion_pattern: String
+            val pattern: String?,
+            val installments_pattern: String?,
+            val exclusion_pattern: String?
         )
 
         data class SecurityCode(
-            val length: Int,
-            val card_location: String,
-            val mode: String
+            val length: Int?,
+            val card_location: String?,
+            val mode: String?
         )
     }
 

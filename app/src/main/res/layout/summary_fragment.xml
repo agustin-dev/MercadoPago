@@ -23,8 +23,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Resumen de pago"
-                android:textSize="16sp"
+                android:text="resumen"
+                style="@style/Title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -178,7 +178,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:visibility="@{ viewmodel.card == null ? View.GONE : View.VISIBLE }"
+            android:visibility="@{ viewmodel.card.number == null ? View.GONE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="@+id/summary_method_container"
             app:layout_constraintStart_toStartOf="@+id/summary_method_container"
             app:layout_constraintTop_toBottomOf="@+id/summary_installment_container">
@@ -193,6 +193,7 @@
                     android:id="@+id/summary_card_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:visibility="@{ viewmodel.card.name == null ? View.GONE : View.VISIBLE }"
                     android:text='@{ "NOMBRE: " + viewmodel.card.name }'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -223,6 +224,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:visibility="@{ viewmodel.card.expireDate == null ? View.GONE : View.VISIBLE }"
                     android:text='@{ "EXPIRA: " + viewmodel.card.expireDate }'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

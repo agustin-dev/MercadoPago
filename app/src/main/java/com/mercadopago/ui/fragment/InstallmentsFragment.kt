@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class InstallmentsFragment : Fragment() {
 
     val viewModel by activityViewModels<MainViewModel>()
+    lateinit var binding: InstallmentsFragmentBinding
     val payersCost = ArrayList<PayerCost>()
     val installmentAdapter = InstallmentAdapter(payersCost) { v ->
         viewModel.showInputData(v, payersCost.find { it.installments.toString() == v.tag.toString() })
@@ -28,7 +29,7 @@ class InstallmentsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding: InstallmentsFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.installments_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.installments_fragment, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
@@ -46,6 +47,7 @@ class InstallmentsFragment : Fragment() {
 
         viewModel.getInstallments().observe(viewLifecycleOwner) {
             payersCost.apply {
+                binding.installmentsLoading.visibility = View.GONE
                 clear()
                 addAll(it.first().payer_costs)
                 sortBy { it.installments }

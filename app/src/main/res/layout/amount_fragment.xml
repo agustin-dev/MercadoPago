@@ -18,8 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Complete el monto a pagar"
-            android:textSize="16sp"
+            android:text="monto a pagar"
+            style="@style/Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:inputType="numberDecimal"
+            android:maxLength="18"
             android:digits="0123456789$ ."
             android:hint="$ 0.00"
             android:gravity="center_horizontal"
