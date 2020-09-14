@@ -48,8 +48,6 @@ class InstallmentsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.getInstallments().observe(viewLifecycleOwner) {
-
-
             when(it) {
                 is Result.Success -> {
                     payersCost.apply {
