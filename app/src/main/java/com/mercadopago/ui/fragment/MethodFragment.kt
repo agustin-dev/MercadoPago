@@ -41,15 +41,13 @@ class MethodFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
-        viewModel.amount.value = "100"
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getCards().observe(viewLifecycleOwner) {
+        viewModel.getMethods().observe(viewLifecycleOwner) {
             when(it) {
                 is Result.Success -> {
                     methods.apply {

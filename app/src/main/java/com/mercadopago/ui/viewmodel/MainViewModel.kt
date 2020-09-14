@@ -70,7 +70,7 @@ class MainViewModel @ViewModelInject constructor(
         Navigation.findNavController(v).popBackStack(R.id.amountFragment, false)
     }
 
-    fun getCards() = liveData(Dispatchers.IO) {
+    fun getMethods() = liveData(Dispatchers.IO) {
         emit(apiRepository.getMethods())
     }
 
@@ -80,7 +80,7 @@ class MainViewModel @ViewModelInject constructor(
 
     fun getInstallments() = liveData(Dispatchers.IO) {
         emit(apiRepository.getInstallments(
-            amount.value ?: "",
+            amount.value?.replace(Regex("[$ ]"), "") ?: "",
             paymentMethod?.id ?: "",
             issuer?.id ?: "")
         )
