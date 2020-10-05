@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "SERVER_URL", '"https://api.mercadopago.com/v1/payment_methods/"')
-        buildConfigField("String", "API_KEY", '"Your API Key!!!"')
+        buildConfigField("String", "API_KEY", '"TEST-e549411e-c687-49ea-a18d-d0bea56892dd"')
     }
 
     compileOptions {
